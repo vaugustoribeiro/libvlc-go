@@ -72,3 +72,17 @@ func newMedia(path string, local bool) (*Media, error) {
 
 	return &Media{media: media}, nil
 }
+
+// This option will be used to determine how the media_player will read the media.
+func (m *Media) AddOption(option string) error {
+	if m == nil {
+		return errors.New("Media cannot be null")
+	}
+
+	cOption := C.CString(option)
+	defer C.free(unsafe.Pointer(cOption))
+
+	C.libvlc_media_add_option(m.media, cOption)
+
+	return nil
+}
